@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html th:replace="~{modules/layout :: html (pagename =${post.spec.title},
+  content = ~{::content}, template = 'post', breadcrumb = ~{::breadcrumb})}" xmlns:th="https://www.thymeleaf.org">
+<th:block th:fragment="breadcrumb">
+  <span>
+    <a href="/">[[#{breadcrumb.home}]]</a>
+  </span>
+  <span>[[${post.spec.title}]]</span>
+</th:block>
+
+<th:block th:fragment="content">
+  <header>
+    <h1 data-toc-skip>[[${post.spec.title}]]</h1>
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span th:with="days=${(new java.util.Date().getTime()-post.spec.publishTime.toEpochMilli())/86400000}">
+        [[#{post.posted}]]
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.spec.publishTime,'yyyy-MM-d  E  h:mm a')}"
+          th:if="${days > 30}">[[${#dates.format(post.spec.publishTime,'yyyy-MM-d')}]]</em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.spec.publishTime,'yyyy-MM-d  E  h:mm a')}"
+          th:if="${days <= 30 && days > 1}">
+          [[${days}+#{date.days_ago}]]
+        </em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.spec.publishTime,'yyyy-MM-d  E  h:mm a')}" th:if="${days == 1}">
+          [[#{date.yesterday}]]
+        </em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.spec.publishTime,'yyyy-MM-d  E  h:mm a')}" th:if="${days == 0}">
+          [[#{date.recently}]]
+        </em>
+      </span>
+
+      <!-- lastmod date -->
+      <!--TODO publish time != update time-->
+      <span th:with="days=${(new java.util.Date().getTime()-post.status.lastModifyTime.toEpochMilli())/86400000}">
+        [[#{post.updated}]]
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.status.lastModifyTime,'yyyy-MM-d  E  h:mm a')}"
+          th:if="${days > 30}">[[${#dates.format(post.status.lastModifyTime,'yyyy-MM-
+          d')}]]</em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.status.lastModifyTime,'yyyy-MM-d  E  h:mm a')}"
+          th:if="${days <= 30 && days > 1}">
+          [[${days}+#{date.days_ago}]]</em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.status.lastModifyTime,'yyyy-MM-d  E  h:mm a')}" th:if="${days == 1}">
+          [[#{date.yesterday}]]</em>
+        <em class data-bs-placement="bottom" data-bs-toggle="tooltip"
+          th:data-bs-title="${#dates.format(post.status.lastModifyTime,'yyyy-MM-d  E  h:mm a')}" th:if="${days == 0}">
+          [[#{date.recently}]]</em>
+      </span>
+
+      <div class="mt-3 mb-3" th:with= "cover = ${post.spec.cover}">
+        <a th:href="${cover}" class="popup img-link preview-img">
+          <img th:src="${cover}" width="1200" height="600">
+        </a>
+
+      </div>
+    </div>
+    <!-- .post-meta -->
+  </header>
+
+  <div class="content">
+    <th:block th:utext="${post.content.content}" />
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
+    <div class="post-meta mb-3" th:if="${#lists.size(post.categories) ge 1}">
+      <i class="far fa-folder-open fa-fw me-1"></i>
+      <th:block th:each="category, index: ${post.categories}">
+        <a th:href="@{'/categories/'+${category.spec.slug}}" th:if="${index.count lt index.size}">
+          [[${category.spec.displayName + ", "}]]
+        </a>
+        <a th:href="@{'/categories/'+${category.spec.slug}}" th:if="${index.count eq index.size}">
+          [[${category.spec.displayName}]]
+        </a>
+      </th:block>
+    </div>
+
+    <!-- tags -->
+    <div class="post-tags" th:if="${#lists.size(post.tags) ge 1}">
+      <i class="fa fa-tags fa-fw me-1"></i>
+      <a class="post-tag no-text-decoration" th:each="tag, index : ${post.tags}" th:href="@{'/tags/'+${tag.spec.slug}}">
+        [[${tag.spec.displayName}]]
+      </a>
+    </div>
+
+    <!-- further reading -->
+    <div class="row">
+      <div class="col-12 px-md-4">
+        <th:block th:replace="~{modules/post/relatedPosts :: relatedPosts}"></th:block>
+      </div>
+    </div>
+
+    <!-- comments -->
+    <div id="comment">
+      <halo:comment group="content.halo.run" kind="Post" th:attr="name=${post.metadata.name}" />
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
+</th:block>
+
+</html>

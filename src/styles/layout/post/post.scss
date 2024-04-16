@@ -1,0 +1,48 @@
+@mixin dot($pl: 0.25rem, $pr: 0.25rem) {
+    content: '\2022';
+    padding-left: $pl;
+    padding-right: $pr;
+  }
+
+h1+.post-meta {
+    >span+span::before {
+        @include dot;
+    }
+
+    em,
+    time {
+        color: var(--text-color);
+    }
+
+    em {
+        a {
+            color: inherit;
+        }
+    }
+}
+
+.post-tail-wrapper {
+    margin-top: 6rem;
+    border-bottom: 1px double var(--main-border-color);
+    font-size: 0.85rem;
+
+    .post-tail-bottom a {
+        color: inherit;
+    }
+
+    .post-meta a:not(:hover) {
+        @extend %link-underline;
+    }
+}
+
+.post-tags {
+    line-height: 2rem;
+
+    .post-tag {
+        &:hover {
+            @extend %link-hover;
+            @extend %tag-hover;
+            @extend %no-bottom-border;
+        }
+    }
+}

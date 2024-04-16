@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<aside id="sidebar" class="d-flex flex-column align-items-end" th:fragment="sidebar(template)">
+  <header class="profile-wrapper">
+    <a id="avatar" class="rounded-circle" href="/">
+      <th:block th:if="${!#strings.isEmpty(site.logo)}">
+        <img th:src="${site.logo}" width="112" height="112" alt="avatar" />
+      </th:block>
+      <th:block th:if="${#strings.isEmpty(site.logo)}">
+        <p th:text="${#strings.substring(site.title,0,1)}" />
+      </th:block>
+    </a>
+    <h1 class="site-title">
+      <a href="/">[[${site.title}]]</a>
+    </h1>
+    <p class="site-subtitle fst-italic">
+      [[${#strings.isEmpty(site.subtitle)} ? 'A text-focused Halo theme' : ${site.subtitle}]]
+    </p>
+  </header>
+
+  <nav class="nav flex-column flex-grow-1 w-100 ps-0" th:with="menuItems = ${menuFinder.getPrimary().menuItems}">
+    <ul class="nav">
+      <!-- 这里classappend判断的不对，待修复-->
+      <li th:class="nav-item"
+        th:classappend="${#strings.prepend(template, '/')} == ${menuItem.status.href} ? 'active' : ''"
+        th:each="menuItem : ${menuItems}">
+        <a class="nav-link" th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}"
+          th:with="icon = ${menuItem.metadata.annotations['icon']}">
+          <i class="fa-fw fas fa-bars-staggered" th:if="${#strings.isEmpty(icon)}"></i>
+          <i th:class="${'fa-fw ' + icon}" th:if="${not #strings.isEmpty(icon)}"></i>
+          <span>
+            [[${menuItem.status.displayName}]]
+          </span>
+        </a>
+      </li>
+      <!-- .nav-item -->
+    </ul>
+  </nav>
+
+  <div class="sidebar-bottom d-flex flex-wrap align-items-center w-100">
+    <!--    {% unless site.theme_mode %}-->
+    <button class="mode-toggle btn" aria-label="Switch Mode">
+      <i class="fas fa-adjust"></i>
+    </button>
+
+    <th:block th:if="${not #arrays.isEmpty(theme.config.sidebar.socials)}">
+      <span class="icon-border"></span>
+      <th:block th:each="entry : ${theme.config.sidebar.socials}">
+        <a th:href="${entry.url}" target=“_blank”>
+          <i th:class="${entry.icon}"></i>
+        </a>
+      </th:block>
+    </th:block>
+  </div>
+</aside>
+
+</html>

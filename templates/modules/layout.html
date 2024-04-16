@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" th:fragment="html(pagename,content,template,breadcrumb)">
+
+<th:block th:replace="~{modules/head :: head(${pagename}, ${template})}" />
+
+<body>
+  <th:block th:replace="~{modules/sidebar :: sidebar(${template})}" />
+
+  <div id="main-wrapper" class="d-flex justify-content-center">
+    <div class="container d-flex flex-column px-xxl-5">
+      <th:block
+        th:replace="~{modules/topbar :: topbar(${breadcrumb}, ${template} == 'home' ? ${site.title} : ${#messages.msgOrNull('breadcrumb.' + template)})}" />
+
+      <div class="row flex-grow-1">
+        <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4 pb-5" th:switch="${template}">
+          <th:block th:case="home">
+            <th:block th:replace="${content}" />
+          </th:block>
+          <th:block th:case="*">
+            <article class="px-1">
+              <th:block th:replace="${content}" />
+            </article>
+          </th:block>
+        </main>
+
+        <!-- panel -->
+        <aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 text-muted">
+          <th:block th:replace="~{modules/panel :: panel(${template})}" />
+        </aside>
+      </div>
+
+      <div class="row">
+        <!-- tail -->
+        <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+          <th:block th:replace="~{modules/footer :: footer()}"/>
+        </div>
+      </div>
+    </div>
+
+    <aside aria-label="Scroll to Top">
+      <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow">
+        <i class="fas fa-angle-up"></i>
+      </button>
+    </aside>
+
+  </div>
+
+  <div id="mask"></div>
+</body>
+
+</html>

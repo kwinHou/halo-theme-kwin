@@ -1,0 +1,62 @@
+/* --- Related Posts --- */
+
+%btn-post-nav {
+    width: 50%;
+    position: relative;
+    border-color: var(--btn-border-color);
+}
+
+.post-navigation {
+    .btn {
+        @extend %btn-post-nav;
+
+        &:not(:hover) {
+            color: var(--link-color);
+        }
+
+        &:hover {
+            &:not(.disabled)::before {
+                color: whitesmoke;
+            }
+        }
+
+        &.disabled {
+            @extend %btn-post-nav;
+
+            pointer-events: auto;
+            cursor: not-allowed;
+            background: none;
+            color: gray;
+        }
+
+        &.btn-outline-primary.disabled:focus {
+            box-shadow: none;
+        }
+
+        &::before {
+            color: var(--text-muted-color);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            content: attr(aria-label);
+        }
+
+        &:first-child {
+            border-radius: $base-radius 0 0 $base-radius;
+            left: 0.5px;
+        }
+
+        &:last-child {
+            border-radius: 0 $base-radius $base-radius 0;
+            right: 0.5px;
+        }
+    }
+
+    p {
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+        margin-top: 0.3rem;
+        white-space: normal;
+    }
+}
+
+/* .post-navigation */

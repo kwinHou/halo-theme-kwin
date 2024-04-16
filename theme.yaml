@@ -1,0 +1,17 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: halo-theme-kwin
+spec:
+  displayName: halo-theme-kwin
+  author:
+    name: kwin
+    website: https://github.com/quinnInChina
+  description: theme for halo
+  logo: 
+  website: https://blog.houkui.xyz
+  repo: 
+  settingName: "theme-kwin-setting"
+  configMapName: "theme-kwin-configMap"
+  version: 1.0.0
+  require: ">=2.0.0"

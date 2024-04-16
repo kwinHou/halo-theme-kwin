@@ -1,0 +1,15 @@
+# nonk8s
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  generateName: annotation-setting-kwin
+spec:
+  targetRef:
+    group: ""
+    kind: MenuItem
+  formSchema:
+    - $formkit: "text"
+      name: "icon"
+      label: "图标"
+      value: "fas fa-bars-staggered"
+      help: "https://fontawesome.com/search"

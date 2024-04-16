@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="relatedPosts">
+    <!-- 文章上下页 -->
+    <nav class="post-navigation d-flex justify-content-between pt-0" aria-label="Post Navigation"
+        th:with="postCursor = ${postFinder.cursor(post.metadata.name)}">
+        <a class="btn btn-outline-primary"
+            th:href="${postCursor.next.status.permalink == null ? '#' : postCursor.next.status.permalink}"
+            th:classappend="${postCursor.next.status.permalink == null} ? disabled">
+            <span style="color: #a4a4a4; font-size: 8px">[[#{related_posts.older}]]</span>
+            <p th:text="${postCursor.previous.spec.title}"></p>
+        </a>
+        <a class="btn btn-outline-primary"
+            th:href="${postCursor.previous.status.permalink == null ? '#' : postCursor.previous.status.permalink}"
+            th:classappend="${postCursor.previous.status.permalink == null} ? disabled">
+            <span style="color: #a4a4a4; font-size: 8px">[[#{related_posts.newer}]]</span>
+            <p th:text="${postCursor.next.spec.title}"></p>
+        </a>
+    </nav>
+</th:block>
+
+</html>
